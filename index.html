@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Terminal</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #020604;
+  color: #00ff80;
+  font-family: Consolas, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.terminal {
+  width: 100%;
+  max-width: 700px;
+  border: 1px solid #00ff80;
+  box-shadow: 0 0 25px #00ff8030;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #050b08;
+}
+
+.topbar {
+  background: #102018;
+  padding: 14px;
+  border-bottom: 1px solid #145c35;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.status {
+  color: #ffcc00;
+}
+
+.content {
+  padding: 22px;
+}
+
+h1 {
+  font-size: clamp(20px, 5vw, 30px);
+  text-shadow: 0 0 12px #00ff80;
+  overflow-wrap: anywhere;
+}
+
+.subtitle {
+  color: #8bb9a0;
+  font-size: 13px;
+}
+
+#output {
+  min-height: 210px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.9;
+  font-size: 13px;
+  margin-top: 25px;
+}
+
+.progress {
+  height: 8px;
+  background: #15251b;
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#bar {
+  height: 100%;
+  width: 0%;
+  background: #00ff80;
+  box-shadow: 0 0 12px #00ff80;
+  transition: width 0.25s;
+}
+
+#percent {
+  font-size: 12px;
+  color: #a4ffcb;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #00ff80;
+  color: #00ff80;
+  background: transparent;
+  font: bold 14px Consolas, monospace;
+  cursor: pointer;
+  margin-top: 14px;
+  border-radius: 5px;
+}
+
+button:hover {
+  color: #020604;
+  background: #00ff80;
+}
+
+#reveal {
+  display: none;
+  text-align: center;
+  padding: 20px 5px;
+}
+
+#reveal h2 {
+  font-size: clamp(24px, 6vw, 38px);
+  color: #ffdf45;
+}
+
+#reveal p {
+  line-height: 1.8;
+  color: #b8ffd2;
+}
+
+.footer {
+  border-top: 1px solid #163d27;
+  padding: 12px;
+  text-align: center;
+  color: #608c70;
+  font-size: 11px;
+}
+
+</style>
+</head>
+
+<body>
+<div class="terminal">
+
+  <div class="topbar">
+    <span>AMZY_TERMINAL v1.0</span>
+    <span class="status" id="status">● STANDBY</span>
+  </div>
+
+  <div class="content">
+    <h1>⚡ SYSTEM ACCESS</h1>
+    <p class="subtitle">
+      Initializing simulated hacker interface...
+    </p>
+
+    <div id="output">> Terminal ready.
+> Awaiting user command...</div>
+
+    <div class="progress">
+      <div id="bar"></div>
+    </div>
+
+    <div id="percent">Scan progress: 0%</div>
+
+    <button id="start" onclick="startPrank()">
+      [ START SYSTEM SCAN ]
+    </button>
+
+    <div id="reveal">
+      <h2>😂 GOT YOU BRO!</h2>
+      <p>
+        Tera system hack nahi hua! 🤣<br>
+        Ye sirf ek HTML prank tha.<br><br>
+        <strong>Hacker banne chala tha...<br>
+        Pehle chai pila! ☕</strong>
+      </p>
+      <button onclick="resetPrank()">[ TRY AGAIN ]</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    SIMULATION ONLY • NO REAL SYSTEM ACCESS
+  </div>
+
+</div>
+
+<script>
+const messages = [
+  "> Connecting to imaginary server...",
+  "> Initializing fake hacker mode...",
+  "> Scanning virtual pixels...",
+  "> Analyzing friendship.exe...",
+  "> Searching for brain.exe...",
+  "> ERROR: Too much bakchodi detected!",
+  "> Installing chai.exe...",
+  "> Preparing surprise..."
+];
+
+let timer = null;
+let running = false;
+
+function startPrank() {
+  if (running) return;
+
+  running = true;
+  let progress = 0;
+  let line = 0;
+
+  const output = document.getElementById("output");
+  const bar = document.getElementById("bar");
+  const percent = document.getElementById("percent");
+  const status = document.getElementById("status");
+  const start = document.getElementById("start");
+  const reveal = document.getElementById("reveal");
+
+  output.textContent = "";
+  reveal.style.display = "none";
+  start.style.display = "none";
+  bar.style.width = "0%";
+  percent.textContent = "Scan progress: 0%";
+  status.textContent = "● SCANNING";
+
+  timer = setInterval(() => {
+    if (line < messages.length) {
+      output.textContent += messages[line] + "\n";
+      line++;
+    }
+
+    progress = Math.min(progress + 4, 100);
+    bar.style.width = progress + "%";
+    percent.textContent = "Scan progress: " + progress + "%";
+
+    if (progress >= 100) {
+      clearInterval(timer);
+      timer = null;
+      running = false;
+
+      status.textContent = "● PRANK COMPLETE";
+      output.textContent +=
+        "\n> SYSTEM REPORT: JUST KIDDING 😂";
+
+      reveal.style.display = "block";
+    }
+  }, 350);
+}
+
+function resetPrank() {
+  if (timer !== null) {
+    clearInterval(timer);
+    timer = null;
+  }
+
+  running = false;
+
+  document.getElementById("output").textContent =
+    "> Terminal ready.\n> Awaiting user command...";
+
+  document.getElementById("bar").style.width = "0%";
+  document.getElementById("percent").textContent =
+    "Scan progress: 0%";
+
+  document.getElementById("status").textContent = "● STANDBY";
+  document.getElementById("reveal").style.display = "none";
+  document.getElementById("start").style.display = "block";
+}
+</script>
+</body>
+</html>
